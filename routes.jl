@@ -1,6 +1,19 @@
 using Genie.Router
-using Genie.Renderer, Genie.Renderer.Html, Genie.Renderer.Json
+using Genie.Renderer, Genie.Renderer.Html, Genie.Renderer.Json, Genie.Requests
 using CSV
+using JuliaMVC.Teams
+
+form = """
+<form action="/" method="POST" enctype="multipart/form-data">
+  <input type="text" name="team_name" value="" placeholder="What's the team name?" />
+  <input type="text" name="coach" value="" placeholder="Who is the coach?" />
+  <input type="text" name="location" value="" placeholder="What is the team's location?" />
+
+  <input type="submit" value="Submit" />
+</form>
+
+<button><a href="/">Home</a></button>
+"""
 
 struct Value
   total::Float64
@@ -22,12 +35,22 @@ players = [
   for player in CSV.File("data/player_stats.csv")
 ]
 
-route("/players") do
-  html(:players, :index, players=players)
+route("/", method = POST) do
+  t = Team(team_name=postpayload(:team_name, "Placeholder"), coach=postpayload(:coach, "Placeholder"), location=postpayload(:location, "Placeholder"))
+  save(t)
+  "Team titled $(t.team_name) created successfully!"
 end
 
 route("/") do
   serve_static_file("welcome.html")
+end
+
+route("/add_team") do
+  html(form)
+end
+
+route("/players") do
+  html(:players, :index, players=players)
 end
 
 route("/hello.html") do

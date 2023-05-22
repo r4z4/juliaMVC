@@ -6,11 +6,12 @@ function up()
   create_table(:teams) do
     [
       pk()
+      # cols with constraints
+      column(:year, :integer, limit = 4)
+      column(:team_name, :string, limit = 40)
       columns([
         :type => :string
-        :team_name => :string
         :coach => :string
-        :year => :integer
         :location => :string
         :description => :string
       ])
