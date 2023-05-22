@@ -4,6 +4,6 @@ dev:
   adapter:  PostgreSQL
   host:     db
   port:     5432
-  database: juliaMVC-dev
+  database: juliamvc_dev
   username: postgres
   password: postgres
